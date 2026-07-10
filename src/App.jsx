@@ -3,7 +3,7 @@ import { useState } from "react";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
-import {WINNING_COMBINATIONS } from "./components/WinningCombination";
+import { WINNING_COMBINATIONS } from "./components/WinningCombination";
 import GameOver from "./components/GameOver";
 
 function deriveActivePlayer(gameTurns) {
@@ -15,9 +15,9 @@ function deriveActivePlayer(gameTurns) {
   return currentPlayer;
 }
 const PLAYERS = {
-   "X": "Player 1",
-    "O": "Player 2"
-}
+  X: "Player 1",
+  O: "Player 2",
+};
 
 const initialGameBoard = [
   [null, null, null],
@@ -26,20 +26,21 @@ const initialGameBoard = [
 ];
 
 function deriveWinner(gameBoard, players) {
-  
-let winner;
+  let winner;
 
   for (const combination of WINNING_COMBINATIONS) {
-    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
-    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
-    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
+    const firstSquareSymbol =
+      gameBoard[combination[0].row][combination[0].column];
+    const secondSquareSymbol =
+      gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol =
+      gameBoard[combination[2].row][combination[2].column];
 
     if (
       firstSquareSymbol &&
       firstSquareSymbol === secondSquareSymbol &&
       firstSquareSymbol === thirdSquareSymbol
     ) {
-
       winner = players[firstSquareSymbol];
     }
   }
@@ -47,32 +48,27 @@ let winner;
 }
 
 function deriveGameBoard(gameTurns) {
-    let gameBoard = [...initialGameBoard.map((innerArray) => [...innerArray])];
+  let gameBoard = [...initialGameBoard.map((innerArray) => [...innerArray])];
 
-  for(const turn of gameTurns) {
-    const {square, player} = turn;
-    const {row , col} = square;
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
     gameBoard[row][col] = player;
   }
   return gameBoard;
 }
 
-
 function App() {
-  const [players, setPlayers] =useState(PLAYERS)
+  const [players, setPlayers] = useState(PLAYERS);
 
-
-const [gameTurns, setGameTurns] = useState([]);
-const activePlayer = deriveActivePlayer(gameTurns);
-const gameBoard = deriveGameBoard(gameTurns);
-const winner = deriveWinner(gameBoard, players);
-const hasDraw = gameTurns.length === 9 && !winner;
+  const [gameTurns, setGameTurns] = useState([]);
+  const activePlayer = deriveActivePlayer(gameTurns);
+  const gameBoard = deriveGameBoard(gameTurns);
+  const winner = deriveWinner(gameBoard, players);
+  const hasDraw = gameTurns.length === 9 && !winner;
 
   function handleSelectSquare(rowIndex, colIndex) {
-
-
     setGameTurns((prevTurns) => {
-  
       const currentPlayer = deriveActivePlayer(prevTurns);
 
       const updatedTurns = [
@@ -83,19 +79,19 @@ const hasDraw = gameTurns.length === 9 && !winner;
     });
   }
 
-function handleRematch() {
-  setGameTurns([]);
-}
+  function handleRematch() {
+    setGameTurns([]);
+  }
 
-function handlePlayerNameChange(playerSymbol, newName) {
-  setPlayers(prevPlayers => {
-     return {
-    ...prevPlayers,
-    [playerSymbol]: newName
-  };
-});
-}
- return (
+  function handlePlayerNameChange(playerSymbol, newName) {
+    setPlayers((prevPlayers) => {
+      return {
+        ...prevPlayers,
+        [playerSymbol]: newName,
+      };
+    });
+  }
+  return (
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
@@ -112,13 +108,15 @@ function handlePlayerNameChange(playerSymbol, newName) {
             onNameChange={handlePlayerNameChange}
           />
         </ol>
-        {(winner || hasDraw) && <GameOver winner={winner} onRematch={handleRematch} />}
+        {(winner || hasDraw) && (
+          <GameOver winner={winner} onRematch={handleRematch} />
+        )}
 
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
     </main>
- )
+  );
 }
 
 export default App;
