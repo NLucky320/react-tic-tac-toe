@@ -210,6 +210,8 @@ ol {
   text-align: center;
   color: #fcd256;
   margin: 0;
+    white-space: normal;
+  overflow: visible;
 }
 
 #game-over p {
@@ -348,4 +350,19 @@ ol {
   100% {
     transform: scale(1);
   }
+}
+.player-name {
+  display: inline-block;
+  width: auto;
+  min-width: 10rem;
+  font-size: 1rem;
+  color: #e1dec7;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
 }
